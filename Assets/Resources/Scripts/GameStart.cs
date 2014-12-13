@@ -6,6 +6,8 @@ public class GameStart : MonoBehaviour {
 	public string UserName = "username";
 	public string Password = "password";
 
+	public Hashtable cookieHeaders = new Hashtable();
+
 	private void SendLogin(string account, string password) {
 		WWWForm form = new WWWForm();
 		form.AddField("user", UserName);
@@ -21,6 +23,13 @@ public class GameStart : MonoBehaviour {
 		
 		if (string.IsNullOrEmpty(www.error))
 		{
+			if (www.responseHeaders.ContainsKey("SET-COOKIE"))
+			{
+				cookieHeaders.Clear();
+				cookieHeaders.Add("COOKIE", www.responseHeaders ["SET-COOKIE"]);
+				Debug.Log(www.responseHeaders ["SET-COOKIE"]);
+			}
+
 			Debug.Log(www.text);
 		} else
 			Debug.Log(www.error);
